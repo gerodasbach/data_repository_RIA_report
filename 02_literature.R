@@ -1,0 +1,192 @@
+
+##############################################################
+# Data preparation
+##############################################################
+
+# SETUP -------------------------------------------------------------------
+
+# Load packages
+library(tidyverse)
+library(foreign)
+library(fixest)
+library(haven)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+# Load data ---------------------------------------------------------------
+
+x = read_dta("C:/Users/gerod/Desktop/EGEI Master/Regional Integration Analysis/5. Research Project/data/Gravity_V202102.dta")
+
+# Clean data----------------------------------------------------------------
+Gravity_21 = x %>% filter(year >= 1980)
+
+Gravity_21 = Gravity_21 %>% select(year,iso3_o,iso3_d,tradeflow_comtrade_o,tradeflow_comtrade_d,
+                                           tradeflow_baci,manuf_tradeflow_baci,tradeflow_imf_o,tradeflow_imf_d)
+
+Gravity_21 = Gravity_21 %>% rename(exporter = iso3_o, importer = iso3_d)
+
+
+# Create dummy variables-----------------------------------------------------
+##group countries belonging to ACFTA (11 countries)
+
+ACFTA = c("IDN","VNM","MYS","PHL","SGP","THA","LAO","MMR","KHM","CHN","BRN")
+
+##group countries belonging to the ASEAN6 and China (7 countries)
+ACFTA6 = c("IDN","MYS","PHL","SGP","THA","CHN","BRN")
+
+##group countries belonging to the ASEAN4 and China (5 countries)
+ACFTA4 = c("VNM","LAO","MMR","KHM","CHN")
+
+
+
+## Create ACFTA = 1 if "iso3_o" and "iso3_d" belong to ACFTA in year t 
+###(ACFTA  entered into force on the 1st of January of 2005)
+
+Gravity_21 = Gravity_21 %>% mutate(acfta = ifelse
+                                       (exporter %in%  ACFTA & importer %in%  ACFTA 
+                                         & year >= 1980
+                                         , 1, 0))
+
+Gravity_21 = Gravity_21 %>% mutate(acfta6 = ifelse
+                                           (exporter %in%  ACFTA6 & importer %in%  ACFTA6 
+                                             & year >= 1980
+                                             , 1, 0))
+
+Gravity_21 = Gravity_21 %>% mutate(acfta4 = ifelse
+                                           (exporter %in%  ACFTA4 & importer %in%  ACFTA4 
+                                             & year >= 1980
+                                             , 1, 0))
+
+
+# 1. Trade flows between ASEAN and CHN 
+## imports from ASEAN to CHN
+Gravity_acfta_d = Gravity_21 %>% filter(acfta == 1, importer == "CHN")
+
+Gravity_acfta_d = Gravity_acfta_d %>% select(year,exporter, importer,tradeflow_comtrade_d)
+
+Gravity_acfta_d <-subset(Gravity_acfta_d, exporter!="CHN")
+
+Gravity_acfta_d <- Gravity_acfta_d %>% drop_na()    
+
+## aggregate imports from ASEAN to CHN
+CHN_ASEAN_imports <- Gravity_acfta_d %>% group_by(year) %>% summarise(sum_imports = sum(tradeflow_comtrade_d)) 
+
+plot1 <-
+ggplot(CHN_ASEAN_imports, aes(x=year, y=sum_imports)) +
+  geom_point() +
+  ggtitle("China's Imports from ASEAN, (1984-2018)") +
+  xlab("Year") +
+  ylab("Volume of Imports in Current USD")
+plot1
+
+## exports from CHN to ASEAN
+Gravity_acfta_o = Gravity_21 %>% filter(acfta == 1, exporter == "CHN")
+
+Gravity_acfta_o = Gravity_acfta_o %>% select(year,exporter,importer,tradeflow_comtrade_d)
+
+Gravity_acfta_o <-subset(Gravity_acfta_o, importer!="CHN")
+
+Gravity_acfta_o <- Gravity_acfta_o %>% drop_na()    
+
+## aggregate exports from CHN to ASEAN
+CHN_ASEAN_exports <- Gravity_acfta_o %>% group_by(year) %>% summarise(sum_exports = sum(tradeflow_comtrade_d)) 
+
+plot2 <-
+  ggplot(CHN_ASEAN_exports, aes(x=year, y=sum_exports)) +
+  geom_point() +
+  ggtitle("China's Exports to ASEAN, (1980-2019)") +
+  xlab("Year") +
+  ylab("Volume of Exports in Current USD")
+plot2
+
+
+# 2. Trade flows between ASEAN6 and CHN 
+## imports from ASEAN6 to CHN
+Gravity_acfta6_d = Gravity_21 %>% filter(acfta6 == 1, importer == "CHN")
+
+Gravity_acfta6_d = Gravity_acfta6_d %>% select(year,exporter,importer,tradeflow_comtrade_d)
+
+Gravity_acfta6_d <-subset(Gravity_acfta6_d, exporter!="CHN")
+
+Gravity_acfta6_d <- Gravity_acfta6_d %>% drop_na()    
+
+
+## aggregate imports from ASEAN6 to CHN
+CHN_ASEAN6_imports <- Gravity_acfta6_d %>% group_by(year) %>% summarise(sum_imports = sum(tradeflow_comtrade_d)) 
+
+plot3 <-
+  ggplot(CHN_ASEAN6_imports, aes(x=year, y=sum_imports)) +
+  geom_point() +
+  ggtitle("China's Imports from ASEAN 6, (1984-2018)") +
+  xlab("Year") +
+  ylab("Volume of Imports in Current USD")
+plot3
+
+## exports from CHN to ASEAN6
+Gravity_acfta6_o = Gravity_21 %>% filter(acfta6 == 1, exporter == "CHN")
+
+Gravity_acfta6_o = Gravity_acfta6_o %>% select(year,exporter,importer,tradeflow_comtrade_d)
+
+Gravity_acfta6_o <-subset(Gravity_acfta6_o, importer!="CHN")
+
+Gravity_acfta6_o <- Gravity_acfta6_o %>% drop_na()  
+
+## aggregate exports from CHN to ASEAN6
+CHN_ASEAN6_exports <- Gravity_acfta6_o %>% group_by(year) %>% summarise(sum_exports = sum(tradeflow_comtrade_d)) 
+
+plot4 <-
+  ggplot(CHN_ASEAN6_exports, aes(x=year, y=sum_exports)) +
+  geom_point() +
+  ggtitle("China's Exports to ASEAN 6, (1980-2019)") +
+  xlab("Year") +
+  ylab("Volume of Exports in Current USD")
+plot4
+
+
+# 1. Trade flows between ASEAN4 and CHN 
+## imports from ASEAN4 to CHN
+Gravity_acfta4_d = Gravity_21 %>% filter(acfta4 == 1, importer == "CHN")
+
+Gravity_acfta4_d = Gravity_acfta4_d %>% select(year,exporter,importer,tradeflow_comtrade_d)
+
+Gravity_acfta4_d <-subset(Gravity_acfta4_d, exporter!="CHN")
+
+Gravity_acfta4_d <- Gravity_acfta4_d %>% drop_na()    
+
+## aggregate imports from ASEAN4 to CHN
+CHN_ASEAN4_imports <- Gravity_acfta4_d %>% group_by(year) %>% summarise(sum_imports = sum(tradeflow_comtrade_d)) 
+
+plot5 <-
+  ggplot(CHN_ASEAN4_imports, aes(x=year, y=sum_imports)) +
+  geom_point() +
+  ggtitle("China's Imports from ASEAN 4, (1984-2018)") +
+  xlab("Year") +
+  ylab("Volume of Imports in Current USD")
+plot5
+
+
+## exports from CHN to ASEAN4
+Gravity_acfta4_o = Gravity_21 %>% filter(acfta4 == 1, exporter == "CHN")
+
+Gravity_acfta4_o = Gravity_acfta4_o %>% select(year,exporter,importer,tradeflow_comtrade_d)
+
+Gravity_acfta4_o <-subset(Gravity_acfta4_o, importer!="CHN")
+
+Gravity_acfta4_o <- Gravity_acfta4_o %>% drop_na()  
+
+## aggregate exports from CHN to ASEAN4
+CHN_ASEAN4_exports <- Gravity_acfta4_o %>% group_by(year) %>% summarise(sum_exports = sum(tradeflow_comtrade_d)) 
+
+plot6 <-
+  ggplot(CHN_ASEAN4_exports, aes(x=year, y=sum_exports)) +
+  geom_point() +
+  ggtitle("China's Exports to ASEAN 4 (1991-2019)") +
+  xlab("Year") +
+  ylab("Volume of Exports in Current USD")
+plot6
+
+
+library(gridExtra)
+grid.arrange(plot1, plot2, plot3, plot4, plot5, plot6, ncol=2, nrow =3)
+
+
