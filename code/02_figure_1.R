@@ -325,15 +325,17 @@ barplot8 <-
   ylab("Growth Rate of Exports vis-a-vis Previous Year (%)")
 barplot8
 
+figure_1 <- grid.arrange(plot1, plot2, plot3, plot4, ncol=2, nrow =2)
 
-
-library(gridExtra)
-
-figure_1 <- grid.arrange(plot1, plot2, plot3, plot4, plot5, plot6, plot7, plot8, ncol=2, nrow =4)
+figure_2 <- grid.arrange(plot5, plot6, plot7, plot8, ncol=2, nrow =2)
 
 figure_1 <- figure_1 %>%
 
 ggsave(file=here("output","figures","figure_1.png"))
+
+figure_2 <- figure_2 %>%
+  
+  ggsave(file=here("output","figures","figure_2.png"))
 
 # grid.arrange(barplot1, barplot2, barplot3, barplot4, barplot5, barplot6, barplot7, barplot8, ncol=2, nrow =4)
 
