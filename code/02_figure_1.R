@@ -11,6 +11,7 @@ library(tidyr)
 library(ggplot2)
 library(gridExtra)
 library(here)
+library(ggtext)
 
 # Load data ----------------------------------------------------------------
 
@@ -67,8 +68,8 @@ plot1 <-
 ggplot(CHN_ASEAN_imports, aes(x=year, y=sum_imports, yScale="log2")) +
   geom_point() +
   ggtitle("China's Imports from ASEAN, (1995-2018)") +
+  theme(plot.title = element_text(size = 11)) +
   xlab("Year") +
-  ylab("Volume of Imports in Current USD")
 plot1
 
 barplot1 <-
@@ -101,8 +102,8 @@ plot2 <-
   ggplot(CHN_ASEAN_exports, aes(x=year, y=sum_exports, yScale="log2")) +
   geom_point() +
   ggtitle("China's Exports to ASEAN, (1995-2019)") +
+  theme(plot.title = element_text(size = 11)) +
   xlab("Year") +
-  ylab("Volume of Exports in Current USD")
 plot2
 
 
@@ -138,8 +139,8 @@ plot3 <-
   ggplot(CHN_ASEAN6_imports, aes(x=year, y=sum_imports)) +
   geom_point() +
   ggtitle("China's Imports from ASEAN 6, (1995-2018)") +
+  theme(plot.title = element_text(size = 11)) +
   xlab("Year") +
-  ylab("Volume of Imports in Current USD")
 plot3
 
 barplot3 <-
@@ -171,8 +172,8 @@ plot4 <-
   ggplot(CHN_ASEAN6_exports, aes(x=year, y=sum_exports, yScale="log2")) +
   geom_point() +
   ggtitle("China's Exports to ASEAN 6, (1995-2019)") +
+  theme(plot.title = element_text(size = 11)) +
   xlab("Year") +
-  ylab("Volume of Exports in Current USD")
 plot4
 
 barplot4 <-
@@ -206,8 +207,8 @@ plot5 <-
   ggplot(CHN_ASEAN4_imports, aes(x=year, y=sum_imports)) +
   geom_point() +
   ggtitle("China's Imports from ASEAN 4, (1995-2018)") +
+  theme(plot.title = element_text(size = 11)) +
   xlab("Year") +
-  ylab("Volume of Imports in Current USD")
 plot5
 
 barplot5 <-
@@ -240,8 +241,8 @@ plot6 <-
   ggplot(CHN_ASEAN4_exports, aes(x=year, y=sum_exports)) +
   geom_point() +
   ggtitle("China's Exports to ASEAN 4 (1995-2019)") +
+  theme(plot.title = element_text(size = 11)) +
   xlab("Year") +
-  ylab("Volume of Exports in Current USD")
 plot6
 
 barplot6 <-
@@ -276,8 +277,8 @@ plot7 <-
   ggplot(CHN_NonASEAN_imports, aes(x=year, y=sum_imports)) +
   geom_point() +
   ggtitle("China's Imports from Non-ASEAN, (1995-2019)") +
+  theme(plot.title = element_text(size = 11)) +
   xlab("Year") +
-  ylab("Volume of Imports in Current USD")
 plot7
 
 barplot7 <-
@@ -313,8 +314,8 @@ plot8 <-
   ggplot(CHN_NonASEAN_exports, aes(x=year, y=sum_exports)) +
   geom_point() +
   ggtitle("China's Exports to Non-ASEAN, (1995-2019)") +
+  theme(plot.title = element_text(size = 11)) +
   xlab("Year") +
-  ylab("Volume of Exports in Current USD")
 plot8
 
 barplot8 <-
@@ -325,19 +326,12 @@ barplot8 <-
   ylab("Growth Rate of Exports vis-a-vis Previous Year (%)")
 barplot8
 
-figure_1 <- grid.arrange(plot1, plot2, plot3, plot4, ncol=2, nrow =2)
 
-figure_2 <- grid.arrange(plot5, plot6, plot7, plot8, ncol=2, nrow =2)
+figure_1 <- grid.arrange(plot1, plot2, plot7, plot8, plot3, plot4, plot5, plot6, ncol=2, nrow =4)
 
 figure_1 <- figure_1 %>%
 
-ggsave(file=here("output","figures","figure_1.png"))
-
-figure_2 <- figure_2 %>%
-  
-  ggsave(file=here("output","figures","figure_2.png"))
-
-# grid.arrange(barplot1, barplot2, barplot3, barplot4, barplot5, barplot6, barplot7, barplot8, ncol=2, nrow =4)
+ggsave(file=here("output","figures","figure_1.png"), height = 20, width = 14)
 
 
 
