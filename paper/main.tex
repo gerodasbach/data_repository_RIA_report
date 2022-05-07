@@ -1,0 +1,78 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{graphicx}
+
+\graphicspath{{../output/figures/}}
+
+\makeatletter
+\def\input@path{{../output/tables/}}
+\makeatother
+
+\usepackage{array}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{colortbl}
+\usepackage{siunitx}
+\usepackage[normalem]{ulem}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{hhline}
+\usepackage{calc}
+\usepackage{tabularx}
+\usepackage{threeparttable}
+\usepackage{wrapfig}
+\usepackage{adjustbox}
+\usepackage{url}
+\usepackage{apacite} 				
+\usepackage{natbib}	
+\setcitestyle{round,aysep={}}
+\usepackage{amsmath}
+\usepackage{amssymb} 
+\usepackage{lmodern}
+\usepackage{float}
+
+\usepackage{geometry}
+\geometry{a4paper,left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\usepackage{hyperref}
+\hypersetup{
+	pdfauthor = {},
+	pdftitle = {RIA Report},
+	pdfkeywords = {},
+	linkcolor=black,
+    filecolor=blue,  
+    citecolor=blue,
+    urlcolor=cyan,
+}
+\linespread{1.3}
+
+
+\begin{document}
+\title{An Ex-Post Assessment of the ASEAN-China Free Trade Agreement (ACFTA) \\ Estimates Based on a Gravity Model}
+\author{Thi Thuy Linh Bui, Gero Dasbach, Shanawar Rana}
+\thanks{We are thankful to Prof. Dr. Bruno Merlevede for helpful theoretical insights. Moreover, Dr. Ruben Dewitte's excellent advice and valuable comments have been a reliable and beneficial source of support for us.}}
+\date{\today}
+\maketitle
+\begin{abstract}
+\noindent Using BACI data on bilateral trade flows, we analyse the effects of trade liberalisation of the ASEAN-China Free Trade Agreement (ACFTA) on trade creation and trade diversion. Employing a gravity framework, we are able to obtain estimates for trade flows relative to the normal level for four different pairs of countries. We find that ACFTA boosts trade within ACFTA member countries, as well as trade with countries sharing an FTA with ACFTA countries. Moreover, trade increases between countries exporting to and importing from ACFTA. Our results in line with the idea of pure trade creation, we find no evidence for a Viner ambiguity.  \\ \\
+\noindent \textbf{Keywords: } ACFTA, Economic Integration, Trade, Tariffs, Gravity Model, Trade Creation, Trade Diversion\\
+\end{abstract}
+
+\newpage
+
+\input{intro.tex}
+
+\input{literature.tex}
+
+\input{data-estimation.tex}
+
+\input{results.tex}
+
+\input{conclusion.tex}
+
+\input{tab_gravity}
+
+\bibliographystyle{apacite}
+\bibliography{bibliography.bib}
+
+\end{document}
