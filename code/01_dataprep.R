@@ -46,7 +46,6 @@ Gravity = Gravity %>% rename(exporter = iso3_o, importer = iso3_d)
 Gravity = Gravity %>% select(year,exporter,importer,trade,contig,dist,comlang_off,
                              pop_o,pop_d,gdp_o,gdp_d,rta)
 
-Gravity <- Gravity %>% drop_na(year,trade,exporter,importer,trade,contig,dist,comlang_off,
-                               pop_o,pop_d,gdp_o,gdp_d,rta)  
+Gravity <- Gravity %>% drop_na(trade)  
 
 saveRDS(Gravity,file=here("input","Gravity.RDS"))
