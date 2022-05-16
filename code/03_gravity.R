@@ -124,10 +124,5 @@ width(tab_gravity) = 1 #Set relative table width for use in documents
 
 ## Export table to latex
 cat(to_latex(tab_gravity),file=here("output","tables","tab_gravity.tex"))
-## Export table to word
-tab_gravity_docx = as_flextable(tab_gravity)
-save_as_docx(tab_gravity_docx, path = here("output","tables","tab_gravity.docx"))
-
-
 
 
